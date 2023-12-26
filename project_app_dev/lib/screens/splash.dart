@@ -18,7 +18,7 @@ class Splash extends StatelessWidget {
          const SizedBox(height: 20,),
          Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          width: double.infinity,
+          width: double.infinity, 
           height: 60,
 
           child: ElevatedButton(
