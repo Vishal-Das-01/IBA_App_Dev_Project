@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:project_app_dev/screens/offer_ride.dart';
+// import 'package:project_app_dev/screens/offer_ride.dart';
+import 'package:project_app_dev/screens/offer_ride_0.dart';
+import 'package:project_app_dev/screens/ride_listing.dart';
 
 class SplashNext extends StatelessWidget {
   const SplashNext({super.key});
@@ -25,7 +27,7 @@ class SplashNext extends StatelessWidget {
           children: [
            Image.asset('assets/images/logo2.png', width: 400,),
       
-           const SizedBox(height: 30,),
+           const SizedBox(height: 10,),
       
            Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -46,7 +48,7 @@ class SplashNext extends StatelessWidget {
                     Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const OfferRide(),
+            builder: (context) => const OfferedList(),
           ));
               }, 
               child: const Text(
@@ -58,7 +60,7 @@ class SplashNext extends StatelessWidget {
                   ),
                 ),),
            ),
-           const SizedBox(height: 50,),
+           const SizedBox(height: 20,),
       
            Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -76,7 +78,11 @@ class SplashNext extends StatelessWidget {
                       shape: const StadiumBorder(),
                     ),
               onPressed: () {
-                
+                   Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const RideList(),
+          ));
               }, 
               child: const Text(
                   'Want a ride',

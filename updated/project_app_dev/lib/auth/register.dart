@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:project_app_dev/auth/firebase_functions.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:project_app_dev/auth/firebase_functions.dart';
 import 'package:project_app_dev/auth/login.dart';
+import 'package:project_app_dev/bloc/signUp/signUp_cubit.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -14,14 +16,25 @@ TextEditingController emailController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
 
 class _RegisterScreenState extends State<RegisterScreen> {
+
+   
   @override
   Widget build(BuildContext context) {
+
+    void submit() async {
+     await context.read<SignUpCubit>().signUp(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+          context : context,
+        );
+  }
+
     return  Scaffold(
       appBar: AppBar(
         title: const Center(
           child: Text(
             'Register - Lets ride together',
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold, color: Color.fromARGB(255, 118, 151, 42)),
           ),
         ),
       ),
@@ -32,7 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             children: [
               Image.asset(
-                'assets/images/logo.png',
+                'assets/images/logo2.png',
                 width: 500,
               ),
            
@@ -44,7 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: InputDecoration(
                   labelText: 'Email',
                   labelStyle: const TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
+                      color: Color.fromARGB(255, 118, 151, 42), fontWeight: FontWeight.bold),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: const BorderSide(
@@ -62,8 +75,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     decoration: InputDecoration(
                       labelText: 'Password',
                       labelStyle: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
+                          color: Color.fromARGB(255, 118, 151, 42), fontWeight: FontWeight.bold),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide: const BorderSide(
@@ -78,10 +90,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                   createUserWithEmailAndPassword(emailController.text, passwordController.text, context);
+
+                      submit();
+                    
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 64, 20, 209),
+                    backgroundColor: const Color.fromARGB(255, 219, 255, 134),
                     padding: EdgeInsets.fromLTRB(
                         MediaQuery.sizeOf(context).width * 0.3,
                         20,
@@ -93,7 +107,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     'Register !',
                     style: TextStyle(
                       fontSize: 20,
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                   ),
                 ),
@@ -105,13 +119,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                      children: <TextSpan>[
                        const TextSpan(
                          text: 'Already have an account? ',
-                         style: TextStyle(color: Color(0xff755ebf)),
+                          style: TextStyle(color: Color.fromARGB(255, 118, 151, 42)),
                        ),
                        TextSpan(
                          text: ' Login',
                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Color(0xff755ebf),
+                            color: Color.fromARGB(255, 118, 151, 42),
                          ),
                          recognizer: TapGestureRecognizer()
                            ..onTap = () => Navigator.push(context,MaterialPageRoute(builder: (context) => const LoginScreen(),),)

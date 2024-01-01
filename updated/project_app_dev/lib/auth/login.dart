@@ -1,7 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:project_app_dev/auth/firebase_functions.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:project_app_dev/auth/firebase_functions.dart';
 import 'package:project_app_dev/auth/register.dart';
+import 'package:project_app_dev/bloc/signIn/signIn_cubit.dart';
+// import 'package:bloc/bloc.dart';
+// import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,12 +20,24 @@ TextEditingController passwordController = TextEditingController();
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
+
+    void submit() async {
+      await context.read<SignInCubit>().signIn(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+            context: context,
+          );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Center(
           child: Text(
             'Login - Let\'s ride together',
-            style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold, color: Color.fromARGB(255, 118, 151, 42)),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 118, 151, 42)),
           ),
         ),
       ),
@@ -40,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
               //     fontSize: 20,
               //     fontWeight: FontWeight.bold,
               //     color: Color.fromARGB(255, 129, 103, 212),
-                 
+
               //   ),
               // ),
               Image.asset(
@@ -55,7 +71,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: InputDecoration(
                   labelText: 'Email',
                   labelStyle: const TextStyle(
-                      color: Color.fromARGB(255, 118, 151, 42), fontWeight: FontWeight.bold),
+                      color: Color.fromARGB(255, 118, 151, 42),
+                      fontWeight: FontWeight.bold),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: const BorderSide(
@@ -73,7 +90,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: InputDecoration(
                   labelText: 'Password',
                   labelStyle: const TextStyle(
-                      color: Color.fromARGB(255, 118, 151, 42), fontWeight: FontWeight.bold),
+                      color: Color.fromARGB(255, 118, 151, 42),
+                      fontWeight: FontWeight.bold),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: const BorderSide(
@@ -88,8 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    signInWithEmailAndPassword(
-                        emailController.text, passwordController.text, context);
+                    submit();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 219, 255, 134),
@@ -109,6 +126,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
+              
+              
               const SizedBox(
                 height: 10,
               ),
@@ -117,7 +136,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: <TextSpan>[
                     const TextSpan(
                       text: 'Don\'t have an account? ',
-                      style: TextStyle(color: Color.fromARGB(255, 118, 151, 42)),
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 118, 151, 42)),
                     ),
                     TextSpan(
                         text: ' Register your self',

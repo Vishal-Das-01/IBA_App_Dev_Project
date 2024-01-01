@@ -1,7 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project_app_dev/bloc/listing/listing_bloc.dart';
+import 'package:project_app_dev/bloc/listing/listing_repo.dart';
+// import 'package:project_app_dev/auth/firebase_functions.dart';
+import 'package:project_app_dev/bloc/user/auth_bloc.dart';
 import 'package:project_app_dev/screens/ride_listing.dart';
+import 'package:project_app_dev/screens/splash_1.dart';
 
 class OfferRide extends StatefulWidget {
   const OfferRide({super.key});
@@ -15,7 +21,11 @@ class _OfferRideState extends State<OfferRide> {
   TextEditingController carController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController seatController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
+  TextEditingController sourceController = TextEditingController();
+  TextEditingController destinationController = TextEditingController();
+  TextEditingController startdayController = TextEditingController();
+  TextEditingController enddayController = TextEditingController();
 
   final db = FirebaseFirestore.instance;
 
@@ -33,13 +43,31 @@ class _OfferRideState extends State<OfferRide> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
+          leading: IconButton(
+              color: const Color.fromARGB(255, 203, 250, 95),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SplashNext(),
+                    ));
+              },
+              icon: const Icon(Icons.home)),
           title: const Center(
               child: Text(
             'Let\s ride together',
             style: TextStyle(
                 fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
           )),
-          backgroundColor: Color.fromARGB(255, 118, 151, 42),
+          backgroundColor: const Color.fromARGB(255, 118, 151, 42),
+          actions: [
+            IconButton(
+                color: const Color.fromARGB(255, 203, 250, 95),
+                onPressed: () {
+                  context.read()<AuthBloc>().add(SignOutRequestedEvent());
+                },
+                icon: const Icon(Icons.logout)),
+          ],
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -47,13 +75,21 @@ class _OfferRideState extends State<OfferRide> {
                 left: MediaQuery.of(context).size.width * 0.1, right: 40),
             child: Column(
               children: [
+                const Text(
+                  "Create offer below",
+                  style: TextStyle(fontSize: 15),
+                ),
                 Image.asset(
-                  'assets/images/logo.png',
+                  'assets/images/logo2.png',
                   width: 300,
                 ),
+
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
+
+                // Mobile number
+
                 TextFormField(
                   controller: mobileController,
                   keyboardType: TextInputType.number,
@@ -73,9 +109,13 @@ class _OfferRideState extends State<OfferRide> {
                     ),
                   ),
                 ),
+
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
+
+                // Car number
+
                 TextFormField(
                   controller: carController,
                   decoration: InputDecoration(
@@ -91,9 +131,99 @@ class _OfferRideState extends State<OfferRide> {
                     ),
                   ),
                 ),
+
                 const SizedBox(
                   height: 10,
                 ),
+
+                // Source
+
+                TextFormField(
+                  controller: sourceController,
+                  decoration: InputDecoration(
+                    labelText: 'From where: - ',
+                    labelStyle: const TextStyle(
+                        color: Color.fromARGB(255, 118, 151, 42),
+                        fontWeight: FontWeight.bold),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+
+                // Destination
+
+                TextFormField(
+                  controller: destinationController,
+                  decoration: InputDecoration(
+                    labelText: 'Destinaition: - ',
+                    labelStyle: const TextStyle(
+                        color: Color.fromARGB(255, 118, 151, 42),
+                        fontWeight: FontWeight.bold),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+
+                // Start Day
+
+                TextFormField(
+                  controller: startdayController,
+                  decoration: InputDecoration(
+                    labelText: 'Start day: - ',
+                    labelStyle: const TextStyle(
+                        color: Color.fromARGB(255, 118, 151, 42),
+                        fontWeight: FontWeight.bold),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+
+                // End day
+
+                TextFormField(
+                  controller: enddayController,
+                  decoration: InputDecoration(
+                    labelText: 'End Day: - ',
+                    labelStyle: const TextStyle(
+                        color: Color.fromARGB(255, 118, 151, 42),
+                        fontWeight: FontWeight.bold),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: const BorderSide(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+
                 TextFormField(
                   controller: seatController,
                   keyboardType: TextInputType.number,
@@ -138,9 +268,11 @@ class _OfferRideState extends State<OfferRide> {
                 const SizedBox(
                   height: 10,
                 ),
+               
                 TextFormField(
+                  controller: timeController,
                   decoration: InputDecoration(
-                    labelText: 'Date',
+                    labelText: 'Time: - ',
                     labelStyle: const TextStyle(
                         color: Color.fromARGB(255, 118, 151, 42),
                         fontWeight: FontWeight.bold),
@@ -177,26 +309,67 @@ class _OfferRideState extends State<OfferRide> {
 
                 Center(
                   child: ElevatedButton(
-                    onPressed: () async {
-                      await db.collection('ridelist').add({
-                        'mobile': mobileController.text,
-                        'car': carController.text,
-                        'seats': seatController.text,
-                        'price': priceController.text,
-                        'date': dateController.text,
-                      });
+                    onPressed: () {
+                      // ListingRepostory listingRepostory = ListingRepostory();
+                      // final userId = context.read<AuthBloc>().state.user!.uid;
+                      // print(userId);
+                      // await context.read()<ListingBloc>().add(AddListingEvent(
+                      //     uid: userId,
+                      //     carumber: carController.text,
+                      //     mobileNumber: mobileController.text,
+                      //     price: priceController.text,
+                      //     seats: seatController.text,
+                      //     source: sourceController.text,
+                      //     destination: destinationController.text,
+                      //     time: timeController.text,
+                      //     startDate: startdayController.text,
+                      //     endDate: enddayController.text));
+                      //                              String mobile,
+                      // String carNumber,
+                      // String seat,
+                      // String price,
+                      // String time,
+                      // String strtDay,
+                      // String endDay,
+                      // String source,
+                      // String dest,
+                      // BuildContext context,
+                      // ignore: use_build_context_synchronously
+                    //  listingRepostory.createOffer(
+                    //       mobileController.text,
+                    //       carController.text,
+                    //       seatController.text,
+                    //       priceController.text,
+                    //       timeController.text,
+                    //       startdayController.text,
+                    //       enddayController.text,
+                    //       sourceController.text,
+                    //       destinationController.text,
+                    //       context);
+
+                    db.collection('ridelisting').add({
+      'mobile': mobileController.text,
+      'car': carController.text,
+      'seats': seatController.text,
+      'price': priceController.text,
+      'time': timeController.text,
+      'strtday': startdayController.text,
+      'endday': enddayController.text,
+      'source': sourceController.text,
+      'destination': destinationController.text,
+    });
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("Offer added successfully!"),
+      backgroundColor: Colors.green,
+    ));
+    // ignore: use_build_context_synchronously
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const RideList(),
+        ));
 
                       // ignore: use_build_context_synchronously
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Offer added successfully!"),
-                        backgroundColor: Colors.green,
-                      ));
-                      // ignore: use_build_context_synchronously
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const RideList(),
-                          ));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromARGB(255, 201, 250, 87),
