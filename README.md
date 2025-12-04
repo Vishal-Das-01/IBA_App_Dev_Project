@@ -27,5 +27,4 @@ The app helps with the seamless connection between rider providers and rider tak
 - Commit your changes: `git commit -m "Add feature"`  
 - Push and create a pull request  
 
-This project is licensed under the MIT License — see the [LICENSE](../LICENSE) file for details.
 
